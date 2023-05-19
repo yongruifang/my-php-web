@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- 引入 layui.css -->
+    <link rel="stylesheet" href="//unpkg.com/layui@2.6.8/dist/css/layui.css">
+</head>
+<body>
+    <table id="age_x" lay-filter="demo">
+        <thead>
+            <tr>
+                <th lay-data="{field:'id',width:100,sort:true}">ID</th>
+                <th lay-data="{field:'fitness_no',width:80,sort:true}">fit</th>
+                <th lay-data="{field:'exercise_no',width:80,sort:true}">频率</th>
+                <th lay-data="{field:'tid',width:100,sort:true}">教练</th>
+                <th lay-data="{field:'birth_date',width:120}">生日</th>
+                <th lay-data="{field:'credit_card',width:80,sort:true}">信用卡</th>
+                <th lay-data="{field:'health_no',width:80}">health</th>
+                <th lay-data="{field:'level_no',width:80}">level</th>                
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            foreach($customers as $customer){
+            ?>
+            <tr>
+                <td><?=$customer['id']?></td>
+                <td><?=$customer['fitness_no']?></td>
+                <td><?=$customer['exercise_no']?></td>
+                <td><?=$customer['tid']?></td>
+                <td><?=$customer['birth_date']?></td>
+                <td><?=$customer['credit_card']?></td>
+                <td><?=$customer['health_no']?></td>
+                <td><?=$customer['level_no']?></td>
+                <td></td> 
+            </tr>
+            <?php }?>
+        </tbody>
+    </table>
+<script src="//unpkg.com/layui@2.6.8/dist/layui.js"></script>
+<script>
+    layui.use(['table'],function(){
+        var table=layui.table;
+        table.init('demo',{
+            minWidth:50
+            ,page:true
+        });
+    });
+</script>
+</body>
+</html>

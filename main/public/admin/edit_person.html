@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../jquery.min.js"></script>
+    <!-- 引入 layui.css -->
+    <link rel="stylesheet" href="//unpkg.com/layui@2.6.8/dist/css/layui.css">
+</head>
+<body>
+<fieldset class="layui-elem-field layui-field-title ">
+    <legend><li id="icon" class="layui-icon layui-icon-face-smile layui-anim layui-anim-rotate " style="font-size: 30px; color: #1E9FFF;" data-anim="layui-anim-rotate"></li> <span style="font-size: 8px">我在等风，也在等你</span></legend>
+    <br>
+    <div class="layui-field-box" style="width: 97%">
+        <form name="form1" class="layui-form" action="" name="example" method="post">
+            <div class="layui-form-item">
+                <label class="layui-form-label">ID:</label>
+                <div class="layui-input-block">
+                    <input type="text" name="id" autocomplete="off"  class="layui-input">
+                    <!-- <div class="layui-form-mid layui-word-aux">辅助文字</div> -->
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">email:</label>
+                <div class="layui-input-block">
+                    <input type="text" name="email" lay-verify="title" autocomplete="off" placeholder="请输入邮箱" class="layui-input">
+                    <!-- <div class="layui-form-mid layui-word-aux">辅助文字</div> -->
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">last_name:</label>
+                <div class="layui-input-block">
+                    <input type="text" name="last_name"  placeholder="请输入名" autocomplete="off" class="layui-input">
+                    <!-- <div class="layui-form-mid layui-word-aux">辅助文字</div> -->
+                </div>
+
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">first_name:</label>
+                <div class="layui-input-block">
+                    <input type="text" name="first_name"  lay-verify="menuSort" placeholder="请输入姓" autocomplete="off" class="layui-input">
+                    <!-- <div class="layui-form-mid layui-word-aux">辅助文字</div> -->
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">phone:</label>
+                <div class="layui-input-block">
+                    <input type="text" name="phone"  lay-verify="menuSort" placeholder="请输入手机号码" autocomplete="off" class="layui-input">
+                    <!-- <div class="layui-form-mid layui-word-aux">辅助文字</div> -->
+                </div>
+            </div>
+            <br><br>
+            <div class="layui-form-item">
+                <div class="layui-input-block" >
+                    <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</fieldset>
+<script src="//unpkg.com/layui@2.6.8/dist/layui.js"></script>
+<script>
+    var form = layui.form
+            ,layer = layui.layer
+            ,layedit = layui.layedit
+            ,laydate = layui.laydate;
+    layui.use(['form', 'layedit', 'laydate'], function(){
+        //自定义验证规则  对应：lay-verify="menuSort"
+        form.verify({});
+        //注意：parent 是 JS 自带的全局对象，可用于操作父页面
+        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+        //目标: 完成提交之后，关闭子窗口，刷新父窗口，
+        //但这需要用到jsp的ajax异步请求
+    });
+    function child(data){
+        var id = $('input[name="id"]').val();     
+        document.form1.action="/lab4_2020151048/index.php?p=admin&c=person&a=index&exec="+data['opt']+"&token="+data['token']+"&id="+id;  
+    }
+</script>
+</body>
+</html>

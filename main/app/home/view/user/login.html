@@ -1,0 +1,25 @@
+<div class="main-user"><div class="container">
+    <div class="m-reg">
+        <div class="m-reg-title">欢迎您登录keep健身!</div>
+        <div class="m-reg-tips"><?=$this->_tips?></div>
+        <form method="post" action="?c=user&a=login&token=<?=TOKEN?>">
+        <table class="m-reg-table">
+            <tr><th>用户名</th><td><input type="text" name="name" placeholder="请输入用户名" required></td></tr>
+            <tr><th>密　码</th><td><input type="password" name="password" placeholder="请输入密码" required></td></tr>
+            <tr><th>验证码</th><td><input type="text" name="captcha" placeholder="请输入验证码" required class="m-reg-short">
+            <tr class="m-reg-captcha"><th></th><td><img src="?c=user&a=captcha" id="captcha"></td></tr>
+            <tr class="m-reg-act"><th></th><td><input type="submit" value="立即登录"><span>没有账号？<a href="?c=user&a=register">立即注册</a></span></td></tr>
+        </table>
+        </form>
+    </div>
+    </div></div>
+    <script>
+    //验证码点击刷新
+    (function(){
+        var $img = $("#captcha");
+        var src = $img.attr("src")+"&_=";
+        $img.click(function(){
+            $img.attr("src",src+Math.random()); //添加随机数防止浏览器缓存图片
+        });
+    })();
+    </script>

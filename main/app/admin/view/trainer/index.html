@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>后台</title>
+    <!-- 引入 layui.css -->
+    <link rel="stylesheet" href="//unpkg.com/layui@2.6.8/dist/css/layui.css">
+    <script src="public/jquery.min.js"></script>
+</head>
+<body>
+    <h3>trainer表</h3>
+    <!-- 工具集 -->
+    <div class="customer-btn-box">
+        <span class="f1">
+            <a class="layui-btn btn-add btn-default" id="trainer-add">添加</a>
+        </span>
+    </div>
+        <table id="trainer" lay-filter="demo">
+        <thead>
+            <tr>
+                <th lay-data="{field:'id',width:80,sort:true}">id</th>
+                <th lay-data="{field:'opt_trainer',width:150, toolbar:'#barDemo'}">操作</th>                    
+            </tr>
+        </thead>
+        <tbody>
+        <?php
+        foreach($trainers as $trainer){
+        ?>
+        <tr>
+            <td><?=$trainer['id']?></td>
+            <td></td>  
+        </tr>
+        <?php }?>
+        </tbody>
+    </table>
+    <h3>log_illegal表</h3>
+    <div class="customer-btn-box">
+        <span class="f1">
+            <a class="layui-btn btn-add btn-default" id="log_illegal-add">添加</a>
+        </span>
+    </div>
+    <table id="log_illegal" lay-filter="demo">
+        <thead>
+            <tr>
+                <th lay-data="{field:'tid',width:80,sort:true}">tid</th>
+                <th lay-data="{field:'times',width:120,sort:true}">times</th>
+                <th lay-data="{field:'opt_log_illegal',width:150, toolbar:'#barDemo'}">操作</th>                    
+            </tr>
+        </thead>
+        <tbody>
+        <?php
+        foreach($log_illegals as $log_illegal){
+        ?>
+        <tr>
+            <td><?=$log_illegal['tid']?></td>
+            <td><?=$log_illegal['times']?></td>
+            <td></td> 
+        </tr>
+        <?php }?>
+        </tbody>
+    </table>
+    <h3>assignmet表</h3>
+    <div class="customer-btn-box">
+        <span class="f1">
+            <a class="layui-btn btn-add btn-default" id="assignment-add">添加</a>
+        </span>
+    </div>
+    <table id="assignment" lay-filter="demo">
+        <thead>
+            <tr>
+                <th lay-data="{field:'cid',width:80,sort:true}">cid</th>
+                <th lay-data="{field:'tid',width:120,sort:true}">tid</th>
+                <th lay-data="{field:'level_no',width:120,sort:true}">level_no</th>
+                <th lay-data="{field:'opt_assignment',width:150, toolbar:'#barDemo'}">操作</th>                    
+            </tr>
+        </thead>
+        <tbody>
+        <?php
+        foreach($assignments as $assignment){
+        ?>
+        <tr>
+            <td><?=$assignment['cid']?></td>
+            <td><?=$assignment['tid']?></td>
+            <td><?=$assignment['level_no']?></td>
+            <td></td> 
+        </tr>
+        <?php }?>
+        </tbody>
+    </table>
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+    <script src="//unpkg.com/layui@2.6.8/dist/layui.js"></script>
+    <script>
+        layui.use('table',function(){
+            var table=layui.table;
+            table.init('demo',{
+                minWidth:50
+                ,page:true
+            });
+            table.on('tool(demo)',function(obj){
+                var data=obj.data
+                  ,layEvent=obj.event;
+                if(layEvent=='del'){
+                    layer.confirm('真的删除么',function(index){
+                        if('opt_trainer' in data){
+                            location.href="?p=admin&c=trainer&a=index&id="+data['id']+"&exec=trainer_delete_&token="+"<?=TOKEN?>";
+                        }else if('opt_log_illegal' in data){
+                            location.href="?p=admin&c=trainer&a=index&id="+data['id']+"&exec=log_illegal_delete_&token="+"<?=TOKEN?>";
+                        }else if('opt_assignment' in data){
+                            location.href="?p=admin&c=trainer&a=index&id="+data['id']+"&exec=assignment_delete_&token="+"<?=TOKEN?>";
+                        }
+                        layer.close(index);
+                    });
+                }else if(layEvent==="edit"){
+                    var url='';
+                    var opt='';
+                    if('opt_trainer' in data){
+                        url='edit_trainer.html';
+                        opt='trainer_edit_';
+                    }else if('opt_log_illegal' in data){
+                        url='edit_log_illegal.html';
+                        opt='log_illegal_edit_';
+                    }else if('opt_assignment' in data){
+                        url='edit_assignment.html';
+                        opt='assignment_edit_';
+                    }
+                    var prefix = './public/admin/';
+                    url=prefix+url;
+                    layer.open({
+                        type:2,
+                        maxmin:true,
+                        content:url,
+                        title: '<li id="icon" class="layui-icon layui-icon-release layui-anim layui-anim-scaleSpring" ' +'style="font-size: 30px; color: #009688;" data-anim="layui-anim-scaleSpring"></li> 编辑 ',
+                        area:['470px','600px'],
+                        success:function(layero,index){
+                            var body=layer.getChildFrame('body',index);
+                            var iframe=window['layui-layer-iframe'+index];
+                            var inputList=body.find('input');
+                            var json = JSON.parse(JSON.stringify(data));
+                            for(let d in json){
+                                body.find('input[name="'+d+'"][type="text"],[type="hidden"]').val(json[d])
+                            }
+                            var objs1={
+                                "token": "<?=TOKEN?>",
+                                "opt":opt
+                            }
+                            iframe.child(objs1);
+                        },
+                        end:function(){
+                            location.reload(false);
+                            layer.msg('保存成功');
+                        }
+                    })
+                }
+            });
+            $('#trainer-add').on('click',function(){
+                layer.open({
+                    type:2,
+                    maxmin:true,
+                    content:"./public/admin/edit_trainer.html",
+                    title: '<li id="icon" class="layui-icon layui-icon-release layui-anim layui-anim-scaleSpring" ' +'style="font-size: 30px; color: #009688;" data-anim="layui-anim-scaleSpring"></li> 编辑 ',
+                    area:['470px','600px'],
+                    success:function(layero,index){
+                        var iframe=window['layui-layer-iframe'+index];
+                        var objs1={
+                            "token": "<?=TOKEN?>",
+                            "opt":"trainer_add_"
+                        }
+                        iframe.child(objs1);
+                    },
+                    end:function(){
+                        location.reload(false);
+                        layer.msg('添加成功');
+                    }
+                })
+            });
+            $('#log_illegal-add').on('click',function(){
+                layer.open({
+                    type:2,
+                    maxmin:true,
+                    content:"./public/admin/edit_log_illegal.html",
+                    title: '<li id="icon" class="layui-icon layui-icon-release layui-anim layui-anim-scaleSpring" ' +'style="font-size: 30px; color: #009688;" data-anim="layui-anim-scaleSpring"></li> 编辑 ',
+                    area:['470px','600px'],
+                    success:function(layero,index){
+                        var iframe=window['layui-layer-iframe'+index];
+                        var objs1={
+                            "token": "<?=TOKEN?>",
+                            "opt":"log_illegal_add_"
+                        }
+                        iframe.child(objs1);
+                    },
+                    end:function(){
+                        location.reload(false);
+                        layer.msg('添加成功');
+                    }
+                })
+            });
+            $('#assignment-add').on('click',function(){
+                layer.open({
+                    type:2,
+                    maxmin:true,
+                    content:"./public/admin/edit_assignment.html",
+                    title: msg+'<li id="icon" class="layui-icon layui-icon-release layui-anim layui-anim-scaleSpring" ' +'style="font-size: 30px; color: #009688;" data-anim="layui-anim-scaleSpring"></li> 编辑 ',
+                    area:['470px','600px'],
+                    success:function(layero,index){
+                        var iframe=window['layui-layer-iframe'+index];
+                        var objs1={
+                            "token": "<?=TOKEN?>",
+                            "opt":"assignment_add_"
+                        }
+                        iframe.child(objs1);
+                    },
+                    end:function(){
+                        location.reload(false);
+                        layer.msg('添加成功');
+                    }
+                })
+            });
+        });
+    </script>
+</body>
+</html>

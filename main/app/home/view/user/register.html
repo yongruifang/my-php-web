@@ -1,0 +1,35 @@
+<div class="main-user"><div class="container">
+    <div class="m-reg">
+        <div class="m-reg-title">欢迎您注册云课堂</div>
+        <div class="m-reg-tips"><?=$this->_tips?></div>
+        <form method="post" action="?c=user&a=register&token=<?=TOKEN?>" id="regForm">
+        <table class="m-reg-table">
+            <tr><th>用户名</th><td><input type="text" name="name" placeholder="用户名由2-15个字符组成!" value="<?=$name?>" required></td></tr>
+            <tr><th>密　码</th><td><input type="password" name="password" id="jq-pwd1" placeholder="请输入6位以上的密码" required></td></tr>
+            <tr><th>确认密码</th><td><input type="password" id="jq-pwd2" placeholder="请再次输入密码，进行确认" required></td></tr>
+            <tr><th>邮　箱</th><td><input type="text" name="email" placeholder="请输入有效的邮箱地址" value="<?=$email?>" required class="m-reg-short"></td></tr>
+            <tr><th>验证码</th><td><input type="text" name="captcha" placeholder="请输入验证码" required class="m-reg-short">
+            <tr class="m-reg-captcha"><th></th><td><img src="?c=user&a=captcha" id="captcha"></td></tr>
+            <tr class="m-reg-terms"><th></th><td><label><input type="checkbox" required>我已阅读并同意</label><a href="#">网站服务条款</a></td></tr>
+            <tr class="m-reg-act"><th></th><td><input type="submit" value="确认注册"><span>已经有账号？<a href="?c=user&a=login">立即登录</a></span></td></tr>
+        </table>
+        </form>
+    </div>
+    </div></div>
+    <script>
+    //表单提交时验证表单
+    $("#regForm").submit(function(event){
+        if($("#jq-pwd1").val() !== $("#jq-pwd2").val()){
+            $(".m-reg-tips").html('<div class="error">两次输入密码不一致！</div>');
+            event.preventDefault();
+        }
+    });
+    //验证码点击刷新
+    (function(){
+        var $img = $("#captcha");
+        var src = $img.attr("src")+"&_=";
+        $img.click(function(){
+            $img.attr("src",src+Math.random()); //添加随机数防止浏览器缓存图片
+        });
+    })();
+    </script>

@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title><?=$title?> - keep健身</title>
+<link rel="stylesheet" href="/lab4_2020151048/public/home/style.css">
+<script src="/lab4_2020151048/public/jquery.min.js"></script>
+</head>
+<body>
+<!-- 顶部 -->
+<div class="top"><div class="container">
+	<div class="top-left">
+		<a href="?p=home&c=index&a=index">首页</a>
+		<a href="#">视频</a>
+		<a href="#">教练</a>
+		<a href="#">咨询</a>
+        <a href="#">套餐</a>
+	</div>
+	<div class="top-right">
+		欢迎来到Keep健身! 
+		<?php if(isset($user)): ?><?=$user['name']?>
+			<a href="?c=user" class="light">进入个人中心</a>
+			<a href="?c=user&a=logout">安全退出</a>
+		<?php else: ?>
+			<a href="?c=user&a=login" class="light">立即登录</a>
+			<a href="?c=user&a=register">注册新用户</a>
+		<?php endif; ?>
+	</div>
+</div></div>
+<!-- 头部 -->
+<div class="midnav"><div class="container">
+	<a href="/"><img src="/lab4_2020151048/public/home/logo.png" alt="logo" width="100px" height="50px"></a>
+	<span class="midnav-subtxt"></span>
+</div></div>
+<!-- 导航栏 -->
+<div class="nav"><div class="container">
+	<a href="?p=admin&c=login&a=index" class="light">后台登录</a>
+</div></div>
+<!-- 内容区域 -->
+<div class="main">
+	<?php require ACTION_VIEW; ?>
+</div>
+<!-- 页脚 -->
+<div class="footer"><div class="container">
+	PHP keep健身 本系统仅供参考和学习
+</div></div>
+</body>
+</html>

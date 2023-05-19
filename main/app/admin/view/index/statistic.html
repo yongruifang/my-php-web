@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Keep健身</title>
+    <link rel="stylesheet" href="//unpkg.com/layui@2.6.8/dist/css/layui.css">
+    <style>
+        #dashboard1,
+        #dashboard2,
+        #dashboard3 {
+            height: 400px;
+        }
+        #pane1 {
+            height: 600px;
+        }
+        body {
+            margin-bottom: 100px;
+        }
+        #barchart1,
+        #barchart2,
+        #barchart3 {
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-container">
+    <!-- 仪表盘 -->
+    <div class="layui-row">
+        <div class="layui-col-md4">
+            <div id="dashboard1"></div>
+        </div>
+        <div class="layui-col-md4">
+            <div id="dashboard2"></div>
+        </div>
+        <div class="layui-col-md4">
+            <div id="dashboard3"></div>
+        </div>         
+    </div>
+    <!-- 条形图 -->
+    <div class="layui-row">
+        <div class="layui-col-md4">
+            <div id="barchart1"></div>
+        </div>
+        <div class="layui-col-md4">
+            <div id="barchart2"></div>
+        </div>
+        <div class="layui-col-md4">
+            <div id="barchart3"></div>
+        </div>
+    </div>    
+     <!-- 南丁格尔 -->
+     <div class="layui-row">
+        <div id="pane1"></div>
+    </div>        
+</div>
+</body>
+</html>
+
+<!-- js引入 -->
+<script src="public/jquery.min.js"></script>
+<script src="//unpkg.com/layui@2.6.8/dist/layui.js"></script>
+<script src="public/echart.js"></script>
+<script>
+$(function() {
+    //面板1图表配置
+    var pane1 = echarts.init(document.getElementById('pane1'));
+    option1 = {
+        title:{
+            text:'顾客年龄分布图',
+            left:'center'
+        },
+        tooltip:{
+            trigger:'item',
+            formatter:'{a}<br/>{b}:{c}({d}%)'
+        },
+        legend: {
+            top: 'bottom'
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                mark: {
+                    show: true
+                },
+                dataView: {
+                    show: true,
+                    readOnly: false
+                },
+                restore: {
+                    show: true
+                },
+                saveAsImage: {
+                    show: true
+                }
+            }
+        },
+        series: [{
+            name: '人数',
+            type: 'pie',
+            radius: [50, 250],
+            center: ['50%', '50%'],
+            roseType: 'area',
+            itemStyle: {
+                borderRadius: 8
+            },
+            data: [
+                {
+                    value: "<?=$age_distrib[0]?>",
+                    name: '18-30岁'
+                },
+                {
+                    value: "<?=$age_distrib[1]?>",
+                    name: '30-40岁'
+                },
+                {
+                    value: "<?=$age_distrib[2]?>",
+                    name: '40-50岁'
+                },
+                {
+                    value: "<?=$age_distrib[3]?>",
+                    name: '50-60岁'
+                },
+                {
+                    value: "<?=$age_distrib[4]?>",
+                    name: '60岁以上'
+                },
+            ]
+        }]
+    };
+    pane1.setOption(option1);
+
+    var dashboard1 = echarts.init(document.getElementById('dashboard1'));
+    option_dash1 = {
+        tooltip: {
+            formatter: '{b} : {c}'
+        },
+        series: [{
+            name: '顾客数量',
+            type: 'gauge',
+            progress: {
+                show: true
+            },
+            detail: {
+                valueAnimation: true,
+                formatter: '{value}'
+            },
+            data: [{
+                value: "<?=$customer_cnt?>",
+                name: '顾客数量'
+            }]
+        }]
+    };
+    dashboard1.setOption(option_dash1);
+    var dashboard2 = echarts.init(document.getElementById('dashboard2'));
+    option_dash2 = {
+        tooltip: {
+            formatter: '{b} : {c}'
+        },
+        series: [{
+            name: '教练数量',
+            type: 'gauge',
+            progress: {
+                show: true
+            },
+            detail: {
+                valueAnimation: true,
+                formatter: '{value}'
+            },
+            data: [{
+                value: "<?=$trainer_cnt?>",
+                name: '教练数量'
+            }]
+        }]
+    };
+    dashboard2.setOption(option_dash2);
+    var dashboard3 = echarts.init(document.getElementById('dashboard3'));
+    option_dash3 = {
+        tooltip: {
+            formatter: '{b} : {c}'
+        },
+        series: [{
+            name: '提供的训练套餐数量',
+            type: 'gauge',
+            progress: {
+                show: true
+            },
+            detail: {
+                valueAnimation: true,
+                formatter: '{value}'
+            },
+            data: [{
+                value: "<?=$level_cnt?>",
+                name: '提供的训练套餐数量'
+            }]
+        }]
+    };
+    dashboard3.setOption(option_dash3);
+        
+    //柱状图配置
+    var barchart1 = echarts.init(document.getElementById('barchart1'));
+    option_bar1 = {
+        title: {
+            text: '顾客运动频次分布表',
+            left: 'center'
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: [{
+            type: 'category',
+            data: ['None', 'Moderate', 'Frequent'],
+            axisTick: {
+                alignWithLabel: true
+            }
+        }],
+        yAxis: [{
+            type: 'value'
+        }],
+        series: [{
+            name: '人数',
+            type: 'bar',
+            barWidth: '60%',
+            data: ["<?=$frequency[0]?>","<?=$frequency[1]?>","<?=$frequency[2]?>"]
+        }]
+    };
+    barchart1.setOption(option_bar1);
+    var barchart2 = echarts.init(document.getElementById('barchart2'));
+    option_bar2 = {
+        title: {
+            text: '顾客健康情况分布表',
+            left: 'center'
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: [{
+            type: 'category',
+            data: ['Unfit', 'Moderately Fit', 'Very Fit'],
+            axisTick: {
+                alignWithLabel: true
+            }
+        }],
+        yAxis: [{
+            type: 'value'
+        }],
+        series: [{
+            name: '人数',
+            type: 'bar',
+            barWidth: '60%',
+            data: ["<?=$fit[0]?>","<?=$fit[1]?>","<?=$fit[2]?>"]
+        }]
+    };
+    barchart2.setOption(option_bar2);
+    var barchart3 = echarts.init(document.getElementById('barchart3'));
+    option_bar3 = {
+        title: {
+            text: '顾客医药健康水平分布图',
+            left: 'center'
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: [{
+            type: 'category',
+            data: ['Unhealthy', 'Somewhat healthy', 'Very healthy'],
+            axisTick: {
+                alignWithLabel: true
+            }
+        }],
+        yAxis: [{
+            type: 'value'
+        }],
+        series: [{
+            name: '人数',
+            type: 'bar',
+            barWidth: '60%',
+            data: ["<?=$health[0]?>","<?=$health[1]?>","<?=$health[2]?>"]
+        }]
+    };
+    barchart3.setOption(option_bar3);
+})
+</script>

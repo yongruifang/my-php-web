@@ -1,0 +1,28 @@
+/*后台通用*/
+body{margin:0;background:#f5f5f5;font-family:Helvetica,Arial,sans-serif,simsun;font-size:16px;color:#676a6c;}
+h1{font-weight:400;margin:0;padding:0;color:#23282d;color:#444;font-family:'Microsoft YaHei';font-size:22px;margin-bottom:18px;}
+.left{text-align:left;}
+.right{text-align:right;}
+.center{text-align:center;}
+.wrap{padding:20px 30px;}
+.box{margin-bottom:18px;border:1px solid #e5e5e5;box-shadow:0 1px 1px rgba(0,0,0,.04);background:#fff;font-size:13px;}
+.box-title{border-bottom:solid #dfe4e7 1px;font-weight:bold;padding:15px;color:#555;font-size:14px;}
+.box-body{padding:15px 15px 0 25px;color:#555;font-size:14px;}
+.box-body p{line-height:20px;text-indent:12px;padding:0;margin:0;margin-bottom:20px;}
+.box-tab{border-bottom:1px dotted #ccc;line-height:25px;margin-bottom:12px;}
+.box-tab a{display:inline-block;padding:0 16px;background:#eee;border:1px solid #ddd;font-style:normal;margin:0 6px;margin-bottom:-1px;text-decoration:none;color:#555;}
+.box-tab a.curr{background:#fff;border-bottom:1px solid #fff;color:#0088B3;}
+.box-tab a:hover{background:#fff;}
+/*信息框*/
+.tips div{border-left:4px solid #00a0d2;padding:12px;background:#fff;box-shadow:0 1px 1px 0 rgba(0,0,0,.1);margin-bottom:15px;color:#444;text-align:left;}
+.tips .error{border-left-color:#dc3232;}
+.tips a{color:#0073aa;text-decoration:none;margin:0 6px;}
+.tips a:hover{text-decoration:underline;}
+/*横排导航*/
+.tab{margin-bottom:15px;overflow:hidden;}
+.tab a{display:block;float:left;margin-right:15px;text-decoration:none;padding:8px 20px;background:#fff;border:1px solid #ccc;border-bottom:1px solid #bbb;border-radius:3px;color:#333;text-shadow:0 1px 0 #eee;}
+.tab a.curr{border:1px solid #63a62f;border-bottom:1px solid #5b992b;background-color: #7fbf4d;text-shadow:0 -1px 0 #4c9021;color:#fff;font-weight:bold;}
+.tab a.curr:hover{border:1px solid #63a62f;border-bottom:1px solid #5b992b;}
+.tab a:hover{border:1px solid #aaa;}
+/*后台首页*/
+.wrap-index{min-width:420px;}

@@ -1,0 +1,175 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>后台 - keep健身</title>
+<!-- 引入 layui.css -->
+<link rel="stylesheet" href="//unpkg.com/layui@2.6.8/dist/css/layui.css">
+<link rel="stylesheet" href="public/admin/layout.css">
+<script src="public/jquery.min.js"></script>
+</head>
+<body>
+<div class="layui-layout layui-layout-admin">
+<header class="layui-header">
+	<div class="logo layui-logo">
+		<h1><a href="#" title="keep健身">keep健身</a></h1>
+	</div>
+	<!-- header左侧内容导航 -->
+	<ul class="layui-nav layui-layout-left">
+		<!-- 侧边栏滑入滑出按钮 -->
+		<li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-header-event="menuLeft">
+			<i class="layui-icon layui-icon-spread-left"></i>
+		</li>
+		<!-- 具体nav内容 -->
+		<li class="layui-nav-item layui-hide-xs"><a href="?p=home&c=index&a=index">前台首页</a></li>
+		<li class="layui-nav-item layui-hide-xs"><a href="#">您好，<?=$user['name']?></a></li>
+		<li class="layui-nav-item layui-hide-xs"><a href="/?p=admin&c=login&a=logout">退出</a></li>
+	</ul>
+</header>
+<!-- 主要区域 -->
+<!-- 左侧导航 -->
+ <aside class="layui-side layui-bg-black">
+	<div class="layui-side-scroll">
+		<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+		<ul class="layui-nav layui-nav-tree" lay-filter="test">
+			<li class="layui-nav-item">
+				<a target="panel" href="?p=admin&c=index&a=home" >主页</a>
+			</li>
+			<li class="layui-nav-item">
+				<a target="panel" href="?p=admin&c=index&a=statistic">数据统计</a>
+			</li>
+			<li class="layui-nav-item">
+				<a href="javascript:;">原生数据表</a>
+				<dl class="layui-nav-child">
+					<dd><a target="panel" href="?p=admin&c=person&a=index">person</a></dd>
+					<dd><a target="panel" href="?p=admin&c=trainer&a=index">trainer</a></dd>
+					<dd><a target="panel" href="?p=admin&c=customer&a=index">customer</a></dd>
+				</dl>
+			</li>
+			<li class="layui-nav-item">
+				<a href="javascript:;">常用函数</a>
+				<dl class="layui-nav-child">
+					<dd><a href="javascript:;" id="link-1">年龄>X的客户</a></dd>
+					<dd><a href="javascript:;" id="link-2">Gold且fit中等以上</a></dd>
+					<dd><a href="javascript:;" id="link-3">教练的客户表</a></dd>
+					<dd><a href="javascript:;" id="link-4">删除非法客户</a></dd>
+					<dd><a href="javascript:;" id="link-5">教练的业绩</a></dd>
+					<dd><a href="javascript:;" id="link-6">添加新客户</a></dd>
+					<dd><a href="javascript:;" id="link-7">添加新教练</a></dd>
+				</dl>
+			</li>
+		</ul>
+	</div>
+</aside>	
+</div>
+<!-- 内容区域 -->
+<div class="content">
+	<iframe src="?p=admin&c=index&a=home" frameborder="no" name="panel"></iframe>
+</div>
+<script src="//unpkg.com/layui@2.6.8/dist/layui.js"></script>
+<script>
+layui.use(['layer', 'form', 'element'], function(){
+	var layer = layui.layer
+	,form = layui.form;
+	var element = layui.element;
+	var token = "<?=TOKEN?>";
+	//1. 查看高于某个年龄的所有顾客
+	$('#link-1').click(function(){
+		layer.prompt({
+			formType:0,
+			value: '20',
+			title: '请输入最小年龄',
+			btn:['确定','取消'],
+			btnAlign: 'c'
+		}, function(value,index){
+			layer.close(index);
+			//layer.msg(value);
+			layer.open({
+				type:2,
+				maxmin:true,
+				content:"?p=admin&c=customer&a=age_x&token="+token+"&age="+value,
+				area:['600px','600px'],
+			})
+		})
+	});
+	//2. 查看Gold且fit中等以上
+	$('#link-2').click(function(){
+		layer.open({
+			type:2,
+			maxmin:true,
+			content:"?p=admin&c=customer&a=gold_fit&token="+token,
+			area:['600px','600px'],
+		})
+	})
+	//3. 查看教练的客户表
+	$('#link-3').click(function(){
+		layer.open({
+			type:2,
+			maxmin:true,
+			content:"?p=admin&c=trainer&a=customer_list&token="+token,
+			area:['600px','600px'],
+		})
+	})
+	//4. 删除非法用户
+	$('#link-4').click(function(){
+		layer.confirm('删除不满18岁的客户?',function(index){
+			location.href = "?p=admin&c=index&a=index&exec=delete_18&token="+token ;
+		})
+	})
+	//5. 教练的业绩
+	$('#link-5').click(function(){
+		layer.open({
+			type:2,
+			maxmin:true,
+			content:"?p=admin&c=trainer&a=customer_fee&token="+token,
+			area:['600px','600px'],
+		})
+	})
+	//6. 添加新客户
+	$('#link-6').click(function(){
+		layer.open({
+                    type:2,
+                    maxmin:true,
+                    content:"./public/admin/add_customer.html",
+                    title: '<li id="icon" class="layui-icon layui-icon-release layui-anim layui-anim-scaleSpring" ' +'style="font-size: 30px; color: #009688;" data-anim="layui-anim-scaleSpring"></li> 编辑 ',
+                    area:['470px','600px'],
+                    success:function(layero,index){
+                        var iframe=window['layui-layer-iframe'+index];
+                        var objs1={
+                            "token": "<?=TOKEN?>",
+                            "opt":"add_customer_success"
+                        }
+                        iframe.child(objs1);
+                    },
+                    end:function(){
+                        //location.reload(false);
+                        layer.msg('添加成功');
+                    }
+                })
+	})
+	//7. 添加新教练
+	$('#link-7').click(function(){
+		layer.open({
+                    type:2,
+                    maxmin:true,
+                    content:"./public/admin/add_trainer.html",
+                    title: '<li id="icon" class="layui-icon layui-icon-release layui-anim layui-anim-scaleSpring" ' +'style="font-size: 30px; color: #009688;" data-anim="layui-anim-scaleSpring"></li> 编辑 ',
+                    area:['470px','600px'],
+                    success:function(layero,index){
+                        var iframe=window['layui-layer-iframe'+index];
+                        var objs1={
+                            "token": "<?=TOKEN?>",
+                            "opt":"add_trainer_success"
+                        }
+                        iframe.child(objs1);
+                    },
+                    end:function(){
+                        //location.reload(false);
+                        layer.msg('添加成功');
+                    }
+                })
+	})
+});
+</script> 
+</body>
+</html>
